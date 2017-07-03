@@ -32,9 +32,11 @@ void header(){
 
 }
 
-void separator(){
+void printSeparator(){
     printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-\n" );
 }
+
+
 
 int main(){
     
@@ -50,7 +52,7 @@ int main(){
     int n = buff[0]-'0';
     container containerList[n];
     printf("Container Quantity: %d\n", n);
-    separator();
+    printSeparator();
 
     //Populating array with file information about the Containers of the first list
     for ( int i = 0; i < n; i++ ) {
@@ -69,12 +71,12 @@ int main(){
         fscanf(fp, "%s", buff);
         containerList[i].weight = atof(buff);
         printf("Weight : %.3f\n", containerList[i].weight );
-        separator();
+        printSeparator();
     }
 
     //Checking the size of array
-    printf("Container Elements read on array: %lu\n", (int) sizeof(containerList)/sizeof(containerList[0]));
-    separator();
+    printf("Container Elements read on array: %lu\n", sizeof(containerList)/sizeof(containerList[0]));
+    printSeparator();
 
     //Reading File and scanning the size of the second array of elements (Containers to be audited)
     fscanf(fp, "%s", buff);
@@ -82,29 +84,32 @@ int main(){
     n = buff[0]-'0';
     container containerAudit[n];
     printf("Containers to Audition: %d\n", n);
-    separator();
+    printSeparator();
     
     //Populating array with file information about the Containers of the second list
     for ( int i = 0; i < n; i++ ) {
 
         fscanf(fp, "%s", buff);
-        strcpy(containerList[i].code,buff);
-        printf("Container Code : %s\n", containerList[i].code );
+        strcpy(containerAudit[i].code,buff);
+        printf("Container Code : %s\n", containerAudit[i].code );
+
+        char* end;
+        printf("Container code on int: %ld\n", strtol(containerAudit[i].code, &end ,36));
 
         fscanf(fp, "%s", buff);
-        strcpy(containerList[i].cnpj, buff);
-        printf("Buyer's CNPJ : %s\n", containerList[i].cnpj );
+        strcpy(containerAudit[i].cnpj, buff);
+        printf("Buyer's CNPJ : %s\n", containerAudit[i].cnpj );
 
         fscanf(fp, "%s", buff);
-        containerList[i].weight = atof(buff);
-        printf("Weight : %.3f\n", containerList[i].weight );
+        containerAudit[i].weight = atof(buff);
+        printf("Weight : %.3f\n", containerAudit[i].weight );
 
-        separator();
+        printSeparator();
 
     }
     //Checking the size of array
-    printf("Container Elements read on array: %lu\n", (int) sizeof(containerAudit)/sizeof(containerAudit[0]));
-    separator();
+    printf("Container Elements read on array: %lu\n", sizeof(containerAudit)/sizeof(containerAudit[0]));
+    printSeparator();
 
     fclose(fp);
 }
