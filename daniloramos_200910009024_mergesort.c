@@ -36,11 +36,11 @@ void printSeparator(){
     printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-\n" );
 }
 
+
 // Merges two subarrays of arr[].
 // First subarray is arr[l..m]
 // Second subarray is arr[m+1..r]
-void mergeContainerList(container arr[], int l, int m, int r)
-{
+void mergeContainerList(container arr[], int l, int m, int r){
     int i, j, k;
     int n1 = m - l + 1;
     int n2 =  r - m;
@@ -61,50 +61,28 @@ void mergeContainerList(container arr[], int l, int m, int r)
 
     char* end;
 
-    while (i < n1 && j < n2)
-    {
+    while (i < n1 && j < n2){
          printf(" %s || %s\n", L[i].code, R[j].code );
 
-        if (strtoll(L[i].code, &end ,36) <= strtoll(R[j].code, &end ,36))
-        {
-            printSeparator();
-            printf(" %s <= %s\n", L[i].code, R[j].code );
+        if (strtoll(L[i].code, &end ,36) <= strtoll(R[j].code, &end ,36)){
             arr[k] = L[i];
-            printSeparator();
-            printf("Container %d :\n", k);
-            printf("Container Code : %s\n", arr[k].code );
-            printf("Container Code on int: %lld\n", strtoll(arr[k].code, &end ,36));
-            printf("Container Buyer's CNPJ : %s\n", arr[k].cnpj );
-            printf("Container's Weight : %.3f\n", arr[k].weight );
             i++;
-        }
-        else
-        {
-            printSeparator();
-            printf(" %s > %s\n", L[i].code, R[j].code );
+        }else{
             arr[k] = R[j];
-            printSeparator();
-            printf("Container %d : \n", k );
-            printf("Container Code : %s\n", arr[k].code );
-            printf("Container Code on int: %lld\n", strtoll(arr[k].code, &end ,36));
-            printf("Container Buyer's CNPJ : %s\n", arr[k].cnpj );
-            printf("Container's Weight : %.3f\n", arr[k].weight );
             j++;
         }
         k++;
     }
  
     /* Copy the remaining elements of L[], if there are any */
-    while (i < n1)
-    {
+    while (i < n1){
         arr[k] = L[i];
         i++;
         k++;
     }
  
     /* Copy the remaining elements of R[], if there are any */
-    while (j < n2)
-    {
+    while (j < n2){
         arr[k] = R[j];
         j++;
         k++;
@@ -114,10 +92,8 @@ void mergeContainerList(container arr[], int l, int m, int r)
 
 /* l is for left index and r is right index of the
    subarray of arr */
-void mergeSortContainerList(container arr[], int l, int r)
-{
-    if (l < r)
-    {
+void mergeSortContainerList(container arr[], int l, int r){
+    if (l < r){
         // Same as (l+r)/2, but avoids overflow in case of large l and h
         int m = l+(r-l)/2;
  
@@ -133,8 +109,7 @@ void mergeSortContainerList(container arr[], int l, int r)
 // Merges two subarrays of arr[].
 // First subarray is arr[l..m]
 // Second subarray is arr[m+1..r]
-void mergeContainerDiff(containerDiff arr[], int l, int m, int r)
-{
+void mergeContainerDiff(containerDiff arr[], int l, int m, int r){
     int i, j, k;
     int n1 = m - l + 1;
     int n2 =  r - m;
@@ -155,52 +130,36 @@ void mergeContainerDiff(containerDiff arr[], int l, int m, int r)
 
     char* end;
 
-    while (i < n1 && j < n2)
-    {
-         printf(" %s || %s\n", L[i].order, R[j].order );
-
-        if (L[i].order <= R[j].order)
-        {
-            printSeparator();
-            printf(" %s <= %s\n", L[i].order, R[j].order );
-            arr[k] = L[i];
-            printSeparator();
-            printf("Container %d :\n", k);
-            /*printf("Container Order: %d\n", arr.order);
-            printf("Container Code: %s\n", arr.code);
-            printf("Container CNPJ diff: %s\n", arr.cnpjDiff);
-            printf("Container Weight Diff: %f\n", arr.weightDiff);
-            printf("Container Weight Percentage Diff: %f\n", arr.percentageDiff);*/
-            i++;
-        }
-        else
-        {
-            printSeparator();
-            printf(" %s > %s\n", L[i].order, R[j].order );
-            arr[k] = R[j];
-            printSeparator();
-            /*printf("Container %d : \n", k );
-            printf("Container Order: %d\n", arr.order);
-            printf("Container Code: %s\n", arr.code);
-            printf("Container CNPJ diff: %s\n", arr.cnpjDiff);
-            printf("Container Weight Diff: %f\n", arr.weightDiff);
-            printf("Container Weight Percentage Diff: %f\n", arr.percentageDiff);*/
-            j++;
+    while (i < n1 && j < n2){
+        if(L[i].order <0 && R[j].order<0){
+            if (L[i].order >= R[j].order){
+                arr[k] = L[i];
+                i++;
+            }else{
+                arr[k] = R[j];
+                j++;
+            }
+        }else{
+            if (L[i].order <= R[j].order){
+                arr[k] = L[i];
+                i++;
+            }else{
+                arr[k] = R[j];
+                j++;
+            }
         }
         k++;
     }
  
     /* Copy the remaining elements of L[], if there are any */
-    while (i < n1)
-    {
+    while (i < n1){
         arr[k] = L[i];
         i++;
         k++;
     }
  
     /* Copy the remaining elements of R[], if there are any */
-    while (j < n2)
-    {
+    while (j < n2){
         arr[k] = R[j];
         j++;
         k++;
@@ -210,10 +169,8 @@ void mergeContainerDiff(containerDiff arr[], int l, int m, int r)
 
 /* l is for left index and r is right index of the
    subarray of arr */
-void mergeSortContainerDiff(containerDiff arr[], int l, int r)
-{
-    if (l < r)
-    {
+void mergeSortContainerDiff(containerDiff arr[], int l, int r){
+    if (l < r){
         // Same as (l+r)/2, but avoids overflow in case of large l and h
         int m = l+(r-l)/2;
  
@@ -227,13 +184,13 @@ void mergeSortContainerDiff(containerDiff arr[], int l, int r)
 }
 
 
-containerDiff binarySearch(container arr[], int l, int r, container x, containerDiff diff){
+containerDiff searchContainerDiff(container arr[], int l, int r, container x){
     
-    if (r >= l)
-    {
+    containerDiff diff;
+    if (r >= l){
         char* end;
         int mid = l + (r - l)/2;
-        
+
         // Finding the element
         if (strtoll(arr[mid].code, &end ,36) == strtoll(x.code, &end ,36)){
             if(strcmp(arr[mid].cnpj, x.cnpj) != 0){
@@ -244,32 +201,28 @@ containerDiff binarySearch(container arr[], int l, int r, container x, container
                 strcat(diff.cnpjDiff, "<->");
                 strcat(diff.cnpjDiff, x.cnpj);
                 diff.weightDiff = 0;
-                printf("Container Order: %d\n", diff.order);
-                printf("Container Code: %s\n", diff.code);
-                printf("Container CNPJ diff: %s\n", diff.cnpjDiff);
-                printSeparator();
+
+                return diff;
 
             }else if(arr[mid].weight != x.weight){
 
                 diff.order = arr[mid].order;
                 strcpy(diff.code, arr[mid].code);
+                strcpy(diff.cnpjDiff, "none");
                 diff.weightDiff = x.weight - arr[mid].weight;
                 diff.percentageDiff = (x.weight/ arr[mid].weight) * 100.0;
-                printf("Container Order: %d\n", diff.order);
-                printf("Container Code: %s\n", diff.code);
-                printf("Container Weight Diff: %f\n", diff.weightDiff);
-                printf("Container Weight Percentage Diff: %f\n", diff.percentageDiff);
-                printSeparator();
 
+                return diff;
             }
-            
         }  
+        if (strtoll(arr[mid].code, &end ,36) > strtoll(x.code, &end ,36)){
+            return searchContainerDiff(arr, l, mid-1, x);
+        } 
 
-        if (strtoll(arr[mid].code, &end ,36) > strtoll(x.code, &end ,36)) return binarySearch(arr, l, mid-1, x, diff);
-
-        return binarySearch(arr, mid+1, r, x, diff);
+        return searchContainerDiff(arr, mid+1, r, x);
     }
     diff.order = 0;
+    return diff;
 }
 
 
@@ -379,40 +332,56 @@ int main(int argc, char **argv){
     n = sizeof(containerAudit)/sizeof(containerAudit[0]);
     
 
-    printf("Container Diffs\n");
-    printSeparator();
+    
 
     containerDiff diffList[n];
     containerDiff diff;
 
     for ( int i = 0; i < n-1; i++ ) {
-        binarySearch(containerList, 0, (sizeof(containerList)/sizeof(containerList[0]) - 1), containerAudit[i], diff);
+        diff = searchContainerDiff(containerList, 0, (sizeof(containerList)/sizeof(containerList[0]) - 1), containerAudit[i]);
+        
         if(diff.order != 0){
-            strcpy(diffList[i].cnpjDiff, diff.cnpjDiff);
-            diffList[i].order = diff.order;
-            strcpy(diffList[i].code, diff.code);
-            diffList[i].weightDiff = diff.weightDiff;
-            diffList[i].percentageDiff = diff.percentageDiff;
-            printf("Container Order: %d\n", diffList.order);
-            printf("Container Code: %s\n", diffList.code);
-            printf("Container CNPJ diff: %s\n", diffList.cnpjDiff);
-            printf("Container Weight Diff: %f\n", diffList.weightDiff);
-            printf("Container Weight Percentage Diff: %f\n", diffList.percentageDiff);
-            
+            if(diff.weightDiff == 0){
+                diff.order = diff.order * -1;
+            }
+            diffList[i] = diff;
         }
     }
 
     n = sizeof(diffList)/sizeof(diffList[0]);
-    //mergeSortContainerDiff(diffList, 0, n-1);
+    mergeSortContainerDiff(diffList, 0, n-1);
 
-    for ( int i = 0; i < n; i++ ) {
- 
-       
-        char* end;
-        printf("Container Code on int: %lld\n", strtoll(diffList[i].code, &end ,36));
+    printf("Printing Container Diffs\n");
+    printSeparator();
 
-        
-        printSeparator();
-         
+    fp = fopen(argv[2], "w+");
+
+    for ( int i = 0; i < n-1; i++ ) {
+
+        if(diffList[i].order < 0){
+            diffList[i].order = diffList[i].order * -1;
+        }
+        printf("Container Order: %d\n", diffList[i].order);
+        printf("Container Code: %s\n", diffList[i].code);
+
+        fprintf(fp,"%s: ", diffList[i].code);
+
+        if ( strcmp(diffList[i].cnpjDiff, "none") != 0){
+            printf("Container CNPJ diff: %s\n", diffList[i].cnpjDiff);
+
+            fprintf(fp, "%s\n" ,diffList[i].cnpjDiff);
+        }
+        if( diffList[i].weightDiff != 0){
+            printf("Container Weight Diff: %.2fkg\n", diffList[i].weightDiff);
+            printf("Container Weight Percentage Diff: %.2f%% \n", diffList[i].percentageDiff);
+            if(diffList[i].percentageDiff > 100){
+                diffList[i].percentageDiff = diffList[i].percentageDiff - 100;
+            }
+            fprintf(fp, "%.f (%2.f%%)\n", diffList[i].weightDiff, diffList[i].percentageDiff);
+
+        }
+        printSeparator();   
     }
+    fclose(fp);
+
 }
