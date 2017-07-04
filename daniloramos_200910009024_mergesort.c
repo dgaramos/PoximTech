@@ -21,6 +21,10 @@ typedef struct containerDiff{
 }containerDiff;
 
 void header(){
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf("\n");
     printf("    dMMMMb  .aMMMb  dMP dMP dMP dMMMMMMMMb      dMMMMMMP dMMMMMP .aMMMb  dMP dMP\n");
     printf("   dMP.dMP dMP dMP dMK.dMP amr dMP dMP dMP        dMP   dMP     dMP VMP dMP dMP \n");
     printf("  dMMMMP  dMP dMP .dMMMKK dMP dMP dMP dMP        dMP   dMMMP   dMP     dMMMMMP  \n");
@@ -62,7 +66,6 @@ void mergeContainerList(container arr[], int l, int m, int r){
     char* end;
 
     while (i < n1 && j < n2){
-         printf(" %s || %s\n", L[i].code, R[j].code );
 
         if (strtoll(L[i].code, &end ,36) <= strtoll(R[j].code, &end ,36)){
             arr[k] = L[i];
@@ -102,7 +105,6 @@ void mergeSortContainerList(container arr[], int l, int r){
         mergeSortContainerList(arr, m+1, r);
  
         mergeContainerList(arr, l, m, r);
-        printSeparator();
     }
 }
 
@@ -179,7 +181,6 @@ void mergeSortContainerDiff(containerDiff arr[], int l, int r){
         mergeSortContainerDiff(arr, m+1, r);
  
         mergeContainerDiff(arr, l, m, r);
-        printSeparator();
     }
 }
 
@@ -240,6 +241,7 @@ int main(int argc, char **argv){
 
     int n = buff[0]-'0';
     container containerList[n];
+    printf("File %s is being read!\n", argv[1]);
     printf("Container Quantity: %d\n", n);
     printSeparator();
 
@@ -283,7 +285,6 @@ int main(int argc, char **argv){
     for ( int i = 0; i < n; i++ ) {
 
         containerAudit[i].order = 0;
-        printf("Container Order: %d\n", containerAudit[i].order);
 
         fscanf(fp, "%s", buff);
         strcpy(containerAudit[i].code,buff);
@@ -306,6 +307,8 @@ int main(int argc, char **argv){
     //Checking the size of array
     printf("Number of Containers registered to audition on array: %lu\n", sizeof(containerAudit)/sizeof(containerAudit[0]));
     printSeparator();
+    printf("File %s was read succesfully!\n", argv[1]);
+    printf("Starting Diff verification!\n");
     fclose(fp);
 
     n = sizeof(containerList)/sizeof(containerList[0]);
@@ -313,7 +316,6 @@ int main(int argc, char **argv){
     mergeSortContainerList(containerList, 0, n-1);
     printSeparator();
 
-    printf("AAAAA\n");
     for ( int i = 0; i < n; i++ ) {
         
         printf("Container Order: %d\n", containerList[i].order);
@@ -352,6 +354,7 @@ int main(int argc, char **argv){
     mergeSortContainerDiff(diffList, 0, n-1);
 
     printf("Printing Container Diffs\n");
+    printf("File %s is being written in the following order: \n", argv[2]);
     printSeparator();
 
     fp = fopen(argv[2], "w+");
@@ -380,8 +383,12 @@ int main(int argc, char **argv){
             fprintf(fp, "%.f (%2.f%%)\n", diffList[i].weightDiff, diffList[i].percentageDiff);
 
         }
-        printSeparator();   
+        printSeparator();
+        
     }
+    printf("File %s was written succesfully!\n", argv[2]); 
+    printf("Closing application...\n");  
+    printSeparator();
     fclose(fp);
 
 }
