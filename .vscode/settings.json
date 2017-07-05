@@ -3,6 +3,7 @@
         "stdio2.h": "c",
         "libio.h": "c",
         "string2.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "stdio.h": "c"
     }
 }
