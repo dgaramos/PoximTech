@@ -27,11 +27,14 @@ int main(int argc, char **argv){
     header();
 
     FILE *fp;
+    FILE *fp2;
     char buff[255];
     
     //Reading File and scanning the arrays to realize the experiment
     fp = fopen(argv[1], "r");
     fscanf(fp, "%s", buff);
+
+    fp2 = fopen(argv[2], "w+");
 
     int n = buff[0]-'0';
 
@@ -39,21 +42,40 @@ int main(int argc, char **argv){
     printf("Arrays to be created: %d\n", n);
     printSeparator();
 
-    int grid[n];
 
     for ( int i = 0; i < n; i++ ) {
         fscanf(fp, "%s", buff);
         int m = atof(buff);
         int arr[m];
-        printf("Elements of the array %d:",i+1);
-        for ( int j=0; j<m; j++ ){
-           fscanf(fp, "%s", buff);
-           arr[j] = atof(buff);
-           printf(" %d",arr[j]);
+        printf("Elements of the array %d:\n",i+1);
+        for ( int j = 0; j < m; j++ ){
+            fscanf(fp, "%s", buff);
+            arr[j] = atof(buff);
+            printf(" %d, %p \n", arr[j], &arr[j]);
         }
-        //grid[i] = arr;
-        printf("\n");
+
+    printSeparator(); 
+    
+
+    int N = 0;
+    //First method
+    int PP = 0;
+    //Second method
+    int HP = 0;
+    //Third method
+    int PM = 0;
+    //Fourth method
+    int HM = 0;
+    //Fifth method
+    int HA = 0;
+    //Sixth method
+    int PA = 0;
+    //Seventh method
+
+    printf("%d: N(%d) PP(%d) HP(%d) PM(%d) HM(%d) HA(%d) PA(%d)\n", i, N, PP, HP, PM, HM, HA, PA);
+    fprintf(fp2,"%d: N(%d) PP(%d) HP(%d) PM(%d) HM(%d) HA(%d) PA(%d)\n", i, N, PP, HP, PM, HM, HA, PA);
+    printSeparator();
     }
     fclose(fp);
-    printSeparator();
+    fclose(fp2);
 }
