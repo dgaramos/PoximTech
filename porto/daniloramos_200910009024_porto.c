@@ -141,6 +141,13 @@ containerDiff searchContainerDiff(container arr[], int l, int r, container x){
 
                 return diff;
             }
+            /*If the container is has no diference between the containers, returns a 
+            container with "nodiff" as cnpjDiff and 0 as weight diff*/
+            strcpy(diff.code, arr[mid].code);
+            strcpy(diff.cnpjDiff, "noDiff");
+            diff.weightDiff = -1;
+            diff.percentageDiff = 0;
+            return diff;
         }  
         if (strtoll(arr[mid].code, &end ,36) > strtoll(x.code, &end ,36)){
             return searchContainerDiff(arr, l, mid-1, x);
@@ -149,10 +156,11 @@ containerDiff searchContainerDiff(container arr[], int l, int r, container x){
         return searchContainerDiff(arr, mid+1, r, x);
     }
     
-    /*if there is no diference between the containers, returns a 
-      container with "nodiff" as cnpjDiff and -1 as weight diff*/
-    strcpy(diff.cnpjDiff, "nodiff");
+    /*If the container is not found in the list of audited containers, returns a 
+      container with "notFound" as cnpjDiff and -1 as weight diff*/
+    strcpy(diff.cnpjDiff, "notFound");
     diff.weightDiff = -1;
+    diff.percentageDiff = 0;
     
     return diff;
 }
@@ -289,9 +297,18 @@ int main(int argc, char **argv){
         //Printing on file
         if(diffList[i].percentageDiff > 100){
             diffList[i].percentageDiff = diffList[i].percentageDiff - 100;
+        }else{
+            diffList[i].percentageDiff = 100 - diffList[i].percentageDiff;
         }
-        fprintf(fp,"%s: ", diffList[i].code);
-        fprintf(fp, "%.f (%2.f%%)\n", diffList[i].weightDiff, diffList[i].percentageDiff);
+
+        if(diffList[i].percentageDiff > 10) {
+            fprintf(fp,"%s: ", diffList[i].code);
+            fprintf(fp, "%.f (%2.f%%)\n", diffList[i].weightDiff, diffList[i].percentageDiff);
+        }else {
+            printf("WARNING!\nThe container with code %s has weight diference minor\nthan 10%%, so it is not gonna be printed on file.\n", diffList[i].code);
+            printSeparator();
+        }
+
     }
 
     printf("File %s was written succesfully!\n", argv[2]); 
