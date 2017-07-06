@@ -22,9 +22,18 @@ void printSeparator(){
     printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-\n" );
 }
 
+void verifyArgs(char **argv){
+    if(argv[1] == NULL || argv[2]== NULL){
+    printf("Não foi detectado arquivo de entrada ou de saida, fechando a aplicação.\n\n\n\n");
+    exit(0);
+    }
+}
+
 int main(int argc, char **argv){
     
     header();
+
+    verifyArgs(argv);
 
     FILE *fp;
     FILE *fp2;
