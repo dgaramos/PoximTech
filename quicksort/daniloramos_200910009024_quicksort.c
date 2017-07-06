@@ -24,10 +24,65 @@ void printSeparator(){
 
 void verifyArgs(char **argv){
     if(argv[1] == NULL || argv[2]== NULL){
-    printf("Não foi detectado arquivo de entrada ou de saida, fechando a aplicação.\n\n\n\n");
+    printf("No input or output file detected, closing the application...\n\n\n\n"); 
     exit(0);
     }
 }
+
+void swap(int* a, int* b, int counter){
+    int t = *a;
+    *a = *b;
+    *b = t;
+    printf("Counter %d\n", counter);
+    counter++;
+    printf("Counter %d\n", counter);
+}
+            
+//First method (picking the last element as the pivot)
+int normalPartition (int arr[], int first, int last, int counter){
+    int pivot = arr[last];    // pivot
+    int i = (first - 1);  // Index of smaller element
+
+    for (int j = first; j <= last- 1; j++){
+        // If current element is smaller than or
+        // equal to pivot
+        if (arr[j] <= pivot){
+            i++;    // increment index of smaller element
+            swap(&arr[i], &arr[j], counter);
+            printf("Counter %d\n", counter);
+           
+
+        }
+    }
+    swap(&arr[i + 1], &arr[last], counter);
+    printf("Counter %d\n", counter);
+    return (i + 1);
+}
+    
+// The main function of the quicksort
+void quickSort(int arr[], int first, int last, char type, int counter){
+    if (first < last){
+         /* pi is partitioning index, arr[p] is now
+         at right place */
+
+        int pi; 
+        switch (type){
+        case 'N':
+            pi = normalPartition(arr, first, last, counter);
+        break;
+
+        default:
+            printf("No valid option has been chosen, closing the application...\n");
+            exit(0);
+        }
+
+        // Separately sort elements before
+        // partition and after partition
+        quickSort(arr, first, pi - 1, type, counter);
+        quickSort(arr, pi + 1, last, type, counter);
+    }
+}
+
 
 int main(int argc, char **argv){
     
@@ -60,14 +115,17 @@ int main(int argc, char **argv){
         for ( int j = 0; j < m; j++ ){
             fscanf(fp, "%s", buff);
             arr[j] = atof(buff);
-            printf(" %d, %p \n", arr[j], &arr[j]);
+            printf(" %d", arr[j]);
         }
-
+    printf("\n");
     printSeparator(); 
-    
-
     int N = 0;
-    //First method
+    quickSort(arr, 0, m - 1, 'N', N);
+    printf("Elements of the array %d sorted by Normal QuickSort:\n",i+1);
+    for ( int j = 0; j < m; j++ ){
+        printf(" %d", arr[j]);
+    }
+    printf("\nCounter: %d\n", N); 
     int PP = 0;
     //Second method
     int HP = 0;
