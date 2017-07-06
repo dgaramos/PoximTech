@@ -24,22 +24,23 @@ void printSeparator(){
 
 void verifyArgs(char **argv){
     if(argv[1] == NULL || argv[2]== NULL){
-    printf("No input or output file detected, closing the application...\n\n\n\n"); 
-    exit(0);
+        printf("No input or output file detected, closing the application...\n\n\n\n"); 
+        exit(0);
     }
 }
 
-void swap(int* a, int* b, int counter){
+void swap(int* a, int* b, int* counter){
     int t = *a;
     *a = *b;
     *b = t;
-    printf("Counter %d\n", counter);
-    counter++;
-    printf("Counter %d\n", counter);
+    *counter = *counter + 1;
+    //printf("SWAP counter memory address %p\n", counter);
+    
+    
 }
             
-//First method (picking the last element as the pivot)
-int normalPartition (int arr[], int first, int last, int counter){
+//First method (picking the last element as the pivot) 
+int normalPartition (int arr[], int first, int last, int* counter){
     int pivot = arr[last];    // pivot
     int i = (first - 1);  // Index of smaller element
 
@@ -48,19 +49,22 @@ int normalPartition (int arr[], int first, int last, int counter){
         // equal to pivot
         if (arr[j] <= pivot){
             i++;    // increment index of smaller element
+            //printf("After SWAP1 counter memory address %p\n", counter);
+         
             swap(&arr[i], &arr[j], counter);
-            printf("Counter %d\n", counter);
-           
-
+            
         }
     }
+    //printf("After SWAP2 counter memory address %p\n", counter);
     swap(&arr[i + 1], &arr[last], counter);
-    printf("Counter %d\n", counter);
+    
+    
     return (i + 1);
 }
     
 // The main function of the quicksort
-void quickSort(int arr[], int first, int last, char type, int counter){
+void quickSort(int arr[], int first, int last, char type, int* counter){
+    
     if (first < last){
          /* pi is partitioning index, arr[p] is now
          at right place */
@@ -68,6 +72,7 @@ void quickSort(int arr[], int first, int last, char type, int counter){
         int pi; 
         switch (type){
         case 'N':
+            //printf("After Partition counter memory address %p\n", counter);
             pi = normalPartition(arr, first, last, counter);
         break;
 
@@ -79,10 +84,12 @@ void quickSort(int arr[], int first, int last, char type, int counter){
         // Separately sort elements before
         // partition and after partition
         quickSort(arr, first, pi - 1, type, counter);
+        
         quickSort(arr, pi + 1, last, type, counter);
+
+        
     }
 }
-
 
 int main(int argc, char **argv){
     
@@ -106,42 +113,52 @@ int main(int argc, char **argv){
     printf("Arrays to be created: %d\n", n);
     printSeparator();
 
-
     for ( int i = 0; i < n; i++ ) {
         fscanf(fp, "%s", buff);
         int m = atof(buff);
         int arr[m];
-        printf("Elements of the array %d:\n",i+1);
+        int arrTmp[m]; 
+        printf("Elements of the array %d:\n",i);
         for ( int j = 0; j < m; j++ ){
             fscanf(fp, "%s", buff);
             arr[j] = atof(buff);
             printf(" %d", arr[j]);
+            arrTmp[j] = arr[j];
+            
         }
-    printf("\n");
-    printSeparator(); 
-    int N = 0;
-    quickSort(arr, 0, m - 1, 'N', N);
-    printf("Elements of the array %d sorted by Normal QuickSort:\n",i+1);
-    for ( int j = 0; j < m; j++ ){
-        printf(" %d", arr[j]);
-    }
-    printf("\nCounter: %d\n", N); 
-    int PP = 0;
-    //Second method
-    int HP = 0;
-    //Third method
-    int PM = 0;
-    //Fourth method
-    int HM = 0;
-    //Fifth method
-    int HA = 0;
-    //Sixth method
-    int PA = 0;
-    //Seventh method
+        printf("\n");
+        printSeparator();
 
-    printf("%d: N(%d) PP(%d) HP(%d) PM(%d) HM(%d) HA(%d) PA(%d)\n", i, N, PP, HP, PM, HM, HA, PA);
-    fprintf(fp2,"%d: N(%d) PP(%d) HP(%d) PM(%d) HM(%d) HA(%d) PA(%d)\n", i, N, PP, HP, PM, HM, HA, PA);
-    printSeparator();
+        int N = 0;
+        printf("SWAP counter memory address: %p\n", &N);
+        quickSort(arrTmp, 0, m - 1, 'N', &N);
+        printf("Elements of the array %d sorted by Normal QuickSort:\n", i);
+        
+        for ( int j = 0; j < m; j++ ){
+            printf(" %d", arrTmp[j]);
+            arrTmp[j] = arr[j]; 
+        }
+
+        printf("\nSWAP Counter: %d\n", N);
+
+        printSeparator();
+
+        int PP = 0;
+        //Second method
+        int HP = 0;
+        //Third method
+        int PM = 0;
+        //Fourth method
+        int HM = 0;
+        //Fifth method
+        int HA = 0;
+        //Sixth method
+        int PA = 0;
+        //Seventh method
+
+        printf("%d: N(%d) PP(%d) HP(%d) PM(%d) HM(%d) HA(%d) PA(%d)\n", i, N, PP, HP, PM, HM, HA, PA);
+        fprintf(fp2,"%d: N(%d) PP(%d) HP(%d) PM(%d) HM(%d) HA(%d) PA(%d)\n", i, N, PP, HP, PM, HM, HA, PA);
+        printSeparator();
     }
     fclose(fp);
     fclose(fp2);
