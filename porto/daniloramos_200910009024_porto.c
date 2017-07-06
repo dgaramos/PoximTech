@@ -16,6 +16,7 @@ typedef struct containerDiff{
     char cnpjDiff[40];
     float weightDiff;
     float percentageDiff;
+
 }containerDiff;
 
 void header(){
@@ -45,13 +46,16 @@ void printSeparator(){
     printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-\n" );
 }
 
-void mergeContainerList(container arr[], int l, int m, int r){
+//MergeSort submethod to the conquest phase.
+void mergeContainerArray(container arr[], int l, int m, int r){
+    
     int i, j, k;
     int n1 = m - l + 1;
     int n2 =  r - m;
 
     container L[n1], R[n2];
 
+    //Filling the sub arrays
     for (i = 0; i < n1; i++)
         L[i] = arr[l + i];
     for (j = 0; j < n2; j++)
@@ -65,6 +69,7 @@ void mergeContainerList(container arr[], int l, int m, int r){
 
     while (i < n1 && j < n2){
 
+        //Compare phase using the container codes converted to long long
         if (strtoll(L[i].code, &end ,36) <= strtoll(R[j].code, &end ,36)){
             arr[k] = L[i];
             i++;
@@ -75,31 +80,38 @@ void mergeContainerList(container arr[], int l, int m, int r){
         k++;
     }
 
+    //Merging what remains of the left subarray
     while (i < n1){
         arr[k] = L[i];
         i++;
         k++;
     }
- 
+    
+    //Merging what remains of the right subarray
     while (j < n2){
         arr[k] = R[j];
         j++;
         k++;
     }
 }
- 
-void mergeSortContainerList(container arr[], int l, int r){
+
+//MergeSort main method, recursive implementation
+void mergeSortContainerArray(container arr[], int l, int r){
+
     if (l < r){
 
         int m = l+(r-l)/2;
 
-        mergeSortContainerList(arr, l, m);
-        mergeSortContainerList(arr, m+1, r);
+        //Divide phase's recursion
+        mergeSortContainerArray(arr, l, m);
+        mergeSortContainerArray(arr, m+1, r);
  
-        mergeContainerList(arr, l, m, r);
+        //Conquest submethod
+        mergeContainerArray(arr, l, m, r);
     }
 }
 
+//Binary Search based container diference finder.
 containerDiff searchContainerDiff(container arr[], int l, int r, container x){
     
     containerDiff diff;
@@ -113,14 +125,12 @@ containerDiff searchContainerDiff(container arr[], int l, int r, container x){
             if(strcmp(x.cnpj, arr[mid].cnpj) != 0){
 
                 strcpy(diff.code, arr[mid].code);
-                
                 strcpy(diff.cnpjDiff, x.cnpj);
                 strcat(diff.cnpjDiff, "<->");
                 strcat(diff.cnpjDiff, arr[mid].cnpj);
-                diff.weightDiff = 0;
-                //printf("%s CNPJ errado: %s\n", diff.code, diff.cnpjDiff);
-                
 
+                diff.weightDiff = 0;
+                
                 return diff;
 
             }else if(arr[mid].weight != x.weight){
@@ -128,7 +138,6 @@ containerDiff searchContainerDiff(container arr[], int l, int r, container x){
                 strcpy(diff.code, arr[mid].code);
                 diff.weightDiff = arr[mid].weight - x.weight;
                 diff.percentageDiff = (arr[mid].weight / x.weight) * 100.0;
-                //printf("%s Peso Errado, %.fkg (%.f%%)\n", diff.code, diff.weightDiff, diff.percentageDiff);
 
                 return diff;
             }
@@ -140,13 +149,15 @@ containerDiff searchContainerDiff(container arr[], int l, int r, container x){
         return searchContainerDiff(arr, mid+1, r, x);
     }
     
+    /*if there is no diference between the containers, returns a 
+      container with "nodiff" as cnpjDiff and -1 as weight diff*/
     strcpy(diff.cnpjDiff, "nodiff");
     diff.weightDiff = -1;
     
     return diff;
 }
 
-// Main method, requires 2 files to run.
+//Main method, requires 2 files as args to run.
 int main(int argc, char **argv){
     
     header();
@@ -226,8 +237,8 @@ int main(int argc, char **argv){
     printSeparator();
     fclose(fp);
 
-    //Sorting containerList so the containers can be found more easily via binary search.
-    mergeSortContainerList(containerAudit, 0, m-1);
+    //Sorting containerAudit so the containers can be found more easily via binary search.
+    mergeSortContainerArray(containerAudit, 0, m-1);
 
     printf("File %s was read succesfully!\n", argv[1]);
     printf("Starting Diff verification!\n");
