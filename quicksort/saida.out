@@ -1,4 +1,4 @@
-0: N(6) PP(0) HP(0) PM(0) HM(0) HA(0) PA(0)
-1: N(5) PP(0) HP(0) PM(0) HM(0) HA(0) PA(0)
-2: N(12) PP(0) HP(0) PM(0) HM(0) HA(0) PA(0)
-3: N(20) PP(0) HP(0) PM(0) HM(0) HA(0) PA(0)
+0: N(6) PP(15) PM(15) PA(21) HP(0) HM(0) HA(0)
+1: N(4) PP(10) PM(10) PA(11) HP(0) HM(0) HA(0)
+2: N(7) PP(23) PM(29) PA(29) HP(0) HM(0) HA(0)
+3: N(10) PA(32) PP(33) PM(45) HP(0) HM(0) HA(0)
