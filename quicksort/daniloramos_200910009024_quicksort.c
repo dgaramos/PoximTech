@@ -41,6 +41,8 @@ void swap(int* a, int* b, int* counter){
     *a = *b;
     *b = t;
     *counter = *counter + 1;
+    
+    printf("Counter %d\n", *counter);
     //printf("SWAP counter memory address %p\n", counter);
     
     
@@ -79,13 +81,11 @@ int normalPartition (int arr[], int first, int last, int type, int* counter){
 
     int pivot = arr[last]; 
 
-    int i = (first - 1);  // Index of smaller element
+    int i = (first - 1);
 
     for (int j = first; j <= last- 1; j++){
-        // If current element is smaller than or
-        // equal to pivot
         if (arr[j] <= pivot){
-            i++;    // increment index of smaller element
+            i++; 
             //printf("After SWAP1 counter memory address %p\n", counter);
             swap(&arr[i], &arr[j], counter);
         }
@@ -98,10 +98,9 @@ int normalPartition (int arr[], int first, int last, int type, int* counter){
 // The main function of the quicksort
 void quickSort(int arr[], int first, int last, int type, int* counter){
     *counter = *counter + 1;
+    printf("Counter %d\n", *counter);
 
     if (first < last){
-         /* pi is partitioning index, arr[p] is now
-         at right place */
 
         int pi; 
 
@@ -193,7 +192,7 @@ int main(int argc, char **argv){
         printf("SWAP and calls counter memory address: %p\n", &grid[sortVariation][i].counter);
         printSeparator();
         quickSort(arrTmp, 0, m - 1, 2, &grid[sortVariation][i].counter);
-        printf("Elements of the array %d sorted by Normal QuickSort:\n", i);
+        printf("Elements of the array %d sorted by Median Quicksort:\n", i);
         for ( int j = 0; j < m; j++ ){
             printf("%d ", arrTmp[j]);
             arrTmp[j] = arr[j]; 
@@ -217,7 +216,7 @@ int main(int argc, char **argv){
         printf("SWAP and calls counter memory address: %p\n", &grid[sortVariation][i].counter);
         printSeparator();
         quickSort(arrTmp, 0, m - 1, sortVariation, &grid[sortVariation][i].counter);
-        printf("Elements of the array %d sorted by Normal QuickSort:\n", i);
+        printf("Elements of the array %d sorted by Random QuickSort:\n", i);
         for ( int j = 0; j < m; j++ ){
             printf("%d ", arrTmp[j]);
             arrTmp[j] = arr[j]; 
