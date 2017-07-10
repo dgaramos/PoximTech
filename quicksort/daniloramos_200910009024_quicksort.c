@@ -41,8 +41,9 @@ void swap(int* a, int* b, int* counter){
     *a = *b;
     *b = t;
     *counter = *counter + 1;
-    
-    printf("Counter %d\n", *counter);
+
+    printf("SWAPING: %d > %d \n", *a, *b );
+    //printf("Counter %d\n", *counter);
     //printf("SWAP counter memory address %p\n", counter);
     
     
@@ -80,6 +81,7 @@ int normalPartition (int arr[], int first, int last, int type, int* counter){
     }
 
     int pivot = arr[last]; 
+    printf("pivot: %d\n", pivot);
 
     int i = (first - 1);
 
@@ -95,31 +97,90 @@ int normalPartition (int arr[], int first, int last, int type, int* counter){
     return (i + 1);
 }
     
+//Hoare method (picking the first element as the pivot) 
+int hoarePartition (int arr[], int first, int last, int type, int* counter){
+
+    int pivot = arr[first]; 
+    printf("pivot: %d\n", pivot);
+
+    int i = first + 1;
+    int j = last;
+
+    while (i < j){
+
+        while(i < j && arr[j] >= pivot){
+            printf("j: %d = %d\n", j, arr[j]);
+            j--; 
+        }
+        while(j > i && arr[i] < pivot){
+            printf("i: %d = %d\n", i, arr[i]);
+            i++; 
+        }
+        if(arr[j]< arr[i]){
+            swap(&arr[j], &arr[i], counter); 
+        }
+        
+    }
+
+    if(arr[j]> pivot){
+        printf("j: %d = %d\n", j);
+        j--;
+    }    
+
+    if(arr[j]< pivot){
+        printf("pivot ");
+        swap(&arr[j], &arr[first], counter);
+    }
+    return j;
+}
+
+
 // The main function of the quicksort
 void quickSort(int arr[], int first, int last, int type, int* counter){
+    
+    //printf("Calling Quicksort!\n");
     *counter = *counter + 1;
-    printf("Counter %d\n", *counter);
+    //printf("Counter %d\n", *counter);
 
     if (first < last){
-
+        
         int pi; 
 
         switch(type){
             case 1 ... 3:
                 pi = normalPartition(arr, first, last, type, counter);
+
+                for ( int j = first; j < last+1; j++ ){
+                    printf("%d ", arr[j]);
+                }
+                printf("\n");
+
+                quickSort(arr, first, pi - 1, type, counter);
+        
+                quickSort(arr, pi + 1, last, type, counter);
+
+            break;
+            case 4:
+                pi = hoarePartition(arr, first, last, type, counter);
+
+                for ( int j = first; j < last +1; j++ ){
+                    printf("%d ", arr[j]);
+
+                }
+                printf("\n");
+
+                quickSort(arr, first, pi - 1, type, counter);
+
+                quickSort(arr, pi + 1, last, type, counter);
+
             break;
             default:
                 printf("No valid option has been chosen, closing the application...\n");
                 exit(0);
 
         }
-            
-        // Separately sort elements before
-        // partition and after partition
-        quickSort(arr, first, pi - 1, type, counter);
-        
-        quickSort(arr, pi + 1, last, type, counter);
-        
+
+
     }
 }
 
@@ -189,7 +250,7 @@ int main(int argc, char **argv){
         strcpy(grid[sortVariation][i].type, "PM");
         grid[sortVariation][i].counter  = 0;
 
-        printf("SWAP and calls counter memory address: %p\n", &grid[sortVariation][i].counter);
+        /*printf("SWAP and calls counter memory address: %p\n", &grid[sortVariation][i].counter);
         printSeparator();
         quickSort(arrTmp, 0, m - 1, 2, &grid[sortVariation][i].counter);
         printf("Elements of the array %d sorted by Median Quicksort:\n", i);
@@ -198,13 +259,16 @@ int main(int argc, char **argv){
             arrTmp[j] = arr[j]; 
         }
         printf("\nSWAP and calls Counter: %d\n", grid[sortVariation][i].counter);
-        printSeparator();
+        printSeparator();*/
 
         while(grid[sortVariation][i].counter < grid[sortVariation-1][i].counter){
             evaluation tmp = grid[sortVariation-1][i];
             grid[sortVariation-1][i] = grid[sortVariation][i];
             grid[sortVariation][i] = tmp;
             sortVariation--;
+            if(sortVariation == 1){
+                break;
+            }
         }      
 
         //Third method
@@ -213,7 +277,7 @@ int main(int argc, char **argv){
         strcpy(grid[sortVariation][i].type, "PA");
         grid[sortVariation][i].counter  = 0;
 
-        printf("SWAP and calls counter memory address: %p\n", &grid[sortVariation][i].counter);
+        /*printf("SWAP and calls counter memory address: %p\n", &grid[sortVariation][i].counter);
         printSeparator();
         quickSort(arrTmp, 0, m - 1, sortVariation, &grid[sortVariation][i].counter);
         printf("Elements of the array %d sorted by Random QuickSort:\n", i);
@@ -222,13 +286,16 @@ int main(int argc, char **argv){
             arrTmp[j] = arr[j]; 
         }
         printf("\nSWAP and calls Counter: %d\n", grid[sortVariation][i].counter);
-        printSeparator();
+        printSeparator();*/
         
         while(grid[sortVariation][i].counter < grid[sortVariation-1][i].counter){
             evaluation tmp = grid[sortVariation-1][i];
             grid[sortVariation-1][i] = grid[sortVariation][i];
             grid[sortVariation][i] = tmp;
             sortVariation--;
+            if(sortVariation == 1){
+                break;
+            }
         }   
 
         //Fourth method
@@ -237,10 +304,10 @@ int main(int argc, char **argv){
         strcpy(grid[sortVariation][i].type, "HP");
         grid[sortVariation][i].counter  = 0;
 
-        /*printf("SWAP and calls counter memory address: %p\n", &grid[sortVariation][i].counter);
+        printf("SWAP and calls counter memory address: %p\n", &grid[sortVariation][i].counter);
         printSeparator();
         quickSort(arrTmp, 0, m - 1, sortVariation, &grid[sortVariation][i].counter);
-        printf("Elements of the array %d sorted by Normal QuickSort:\n", i);
+        printf("Elements of the array %d sorted by Normal Hoare QuickSort:\n", i);
         for ( int j = 0; j < m; j++ ){
             printf("%d ", arrTmp[j]);
             arrTmp[j] = arr[j]; 
@@ -253,14 +320,41 @@ int main(int argc, char **argv){
             grid[sortVariation-1][i] = grid[sortVariation][i];
             grid[sortVariation][i] = tmp;
             sortVariation--;
-        }   */
+            if(sortVariation == 1){
+                break;
+            }
+        } 
 
         //Fifth method
-        strcpy(grid[5][i].type, "HM");
-        grid[5][i].counter  = 0;
+        sortVariation = 5;
+
+        strcpy(grid[sortVariation][i].type, "HM");
+        grid[sortVariation][i].counter  = 0;
+
+        while(grid[sortVariation][i].counter < grid[sortVariation-1][i].counter){
+            evaluation tmp = grid[sortVariation-1][i];
+            grid[sortVariation-1][i] = grid[sortVariation][i];
+            grid[sortVariation][i] = tmp;
+            sortVariation--;
+            if(sortVariation == 1){
+                break;
+            }
+        }
         //Sixth method
-        strcpy(grid[6][i].type, "HA");
-        grid[6][i].counter  = 0;
+        sortVariation = 6;
+
+        strcpy(grid[sortVariation][i].type, "HA");
+        grid[sortVariation][i].counter  = 0;
+
+        while(grid[sortVariation][i].counter < grid[sortVariation-1][i].counter){
+            evaluation tmp = grid[sortVariation-1][i];
+            grid[sortVariation-1][i] = grid[sortVariation][i];
+            grid[sortVariation][i] = tmp;
+            sortVariation--;
+            if(sortVariation == 1){
+                break;
+            }
+        }
 
         printf("%d: %s(%d) %s(%d) %s(%d) %s(%d) %s(%d) %s(%d) %s(%d)\n", i, grid[0][i].type, grid[0][i].counter, 
         grid[1][i].type, grid[1][i].counter, grid[2][i].type, grid[2][i].counter, grid[3][i].type, grid[3][i].counter, 
