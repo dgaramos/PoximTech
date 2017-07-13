@@ -97,7 +97,7 @@ int hoarePartition (int arr[], int first, int last, int type, int* counter){
 int medianPartition(int arr[], int first, int last, int type, int* counter){
     int ar[3];
     int tmp;
-    int n = (last+1) - first;
+    int n = (last + 1) - first;
     ar[0] = ((n)/4) + first;
     ar[1] = ((n)/2) + first;
     if (arr[ar[1]] < arr[ar[0]]){
@@ -110,15 +110,11 @@ int medianPartition(int arr[], int first, int last, int type, int* counter){
         //printf("1 %d: %d %d: %d %d: %d\n", ar[2], arr[ar[2]], ar[0], arr[ar[0]], ar[1], arr[ar[1]]);
         switch(type){
             case 2:
-                if(ar[0]!=last){
-                    swap(&arr[ar[0]], &arr[last] , counter);
-                }
+                swap(&arr[ar[0]], &arr[last] , counter);
                 return normalPartition(arr, first, last, type, counter); 
             break;
             case 5:
-                if(ar[0]!=first){
-                    swap(&arr[ar[0]], &arr[first] , counter);
-                }
+                swap(&arr[ar[0]], &arr[first] , counter);
                 return hoarePartition(arr, first, last, type, counter); 
             break;
         }
@@ -126,15 +122,11 @@ int medianPartition(int arr[], int first, int last, int type, int* counter){
         //printf("2 %d: %d %d: %d %d: %d\n", ar[0], arr[ar[0]], ar[2], arr[ar[2]], ar[1], arr[ar[1]]);
         switch(type){
             case 2:
-                if(ar[2]!=last){
-                    swap(&arr[ar[2]], &arr[last] , counter);
-                }
+                swap(&arr[ar[2]], &arr[last] , counter);
                 return normalPartition(arr, first, last, type, counter);
             break;
             case 5:
-                if(ar[2]!=first){
-                    swap(&arr[ar[2]], &arr[first] , counter);
-                }
+                swap(&arr[ar[2]], &arr[first] , counter);
                 return hoarePartition(arr, first, last, type, counter);
             break;
         }
@@ -142,15 +134,11 @@ int medianPartition(int arr[], int first, int last, int type, int* counter){
         //printf("3 %d: %d %d: %d %d: %d\n", ar[0], arr[ar[0]], ar[1], arr[ar[1]], ar[2], arr[ar[2]]);
         switch(type){
             case 2:
-                if(ar[1]!=last){
-                    swap(&arr[ar[1]], &arr[last] , counter);
-                }
+                swap(&arr[ar[1]], &arr[last] , counter);
                 return normalPartition(arr, first, last, type, counter);
             break;
             case 5:
-                if(ar[1]!=first){
-                    swap(&arr[ar[1]], &arr[first] , counter);
-                }
+                swap(&arr[ar[1]], &arr[first] , counter);
                 return hoarePartition(arr, first, last, type, counter);
             break;
         }
@@ -163,15 +151,11 @@ int randomPartition(int arr[], int first, int last, int type, int* counter){
 
     switch(type){
         case 3:
-            if(i!=last){
-                swap(&arr[last], &arr[i], counter);
-            }
+            swap(&arr[last], &arr[i], counter);
             return normalPartition(arr, first, last, type, counter);
         break;
         case 6:
-            if(i!=first){
-                swap(&arr[first], &arr[i], counter);
-            }
+            swap(&arr[first], &arr[i], counter);
             return hoarePartition(arr, first, last, type, counter);
         break;
     }
