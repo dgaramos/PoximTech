@@ -80,7 +80,7 @@ int hoarePartition (int arr[], int first, int last, int type, int* counter){
 
     while (i < j){
 
-        while(i < j && arr[j] > pivot){
+        while(i < j && arr[j] >= pivot){
             j--; 
         }
         while(j > i && arr[i] < pivot){
@@ -191,21 +191,45 @@ void quickSort(int arr[], int first, int last, int type, int* counter){
         switch(type){
             case 1:
                 pi = normalPartition(arr, first, last, type, counter);
+
+                quickSort(arr, first, pi - 1, type, counter);
+
+                quickSort(arr, pi + 1, last, type, counter);
             break;
             case 2:
                 pi = medianPartition(arr, first, last, type, counter);
+
+                quickSort(arr, first, pi - 1, type, counter);
+
+                quickSort(arr, pi + 1, last, type, counter);
             break;
             case 3:
                 pi = randomPartition(arr, first, last, type, counter);
+
+                quickSort(arr, first, pi - 1, type, counter);
+
+                quickSort(arr, pi + 1, last, type, counter);
             break;
             case 4:
                 pi = hoarePartition(arr, first, last, type, counter);
+
+                quickSort(arr, first, pi, type, counter);
+
+                quickSort(arr, pi + 1, last, type, counter);
             break;
             case 5:
                 pi = medianPartition(arr, first, last, type, counter);
+
+                quickSort(arr, first, pi, type, counter);
+
+                quickSort(arr, pi + 1, last, type, counter);
             break;
             case 6:
                 pi = randomPartition(arr, first, last, type, counter);
+
+                quickSort(arr, first, pi, type, counter);
+
+                quickSort(arr, pi + 1, last, type, counter);
             break;
             default:
                 printf("No valid option has been chosen, closing the application...\n");
@@ -217,9 +241,7 @@ void quickSort(int arr[], int first, int last, int type, int* counter){
         }
         printf("\n");*/
 
-        quickSort(arr, first, pi - 1, type, counter);
-
-        quickSort(arr, pi + 1, last, type, counter);
+        
     }
 }
 
