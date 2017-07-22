@@ -14,6 +14,10 @@ mediana de 3 (PM), particionar por pivô aleatório
 (PA), hoare padrão (HP), hoare por mediana de 3
 (HM) e hoare por pivô aleatório (HA).
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+EXECUTING ON PROMPT/TERMINAL
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+.\daniloramos_200910009024_quicksort entrada.in saida.out
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ORIGINAL INPUT
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 4
@@ -38,9 +42,5 @@ contendo o número de trocas e de chamadas
 2: N(7) HP(17) PM(18) PP(23) HM(26) HA(27) PA(30) 
 3: N(10) PM(28) HP(28) PP(33) HA(35) HM(37) PA(38) 
 
-0: PA(20)+2 HA(20)+0
-1: PA(10)+1 HA(12)+0
-2: PA(29)+1 HA(25)+2
-3: PA(36)+2 HA(34)+1
 
 
