@@ -143,6 +143,7 @@ int medianPartition(int arr[], int first, int last, int type, int* counter){
             break;
         }
     }
+    return 0;
 }
 
 int randomPartition(int arr[], int first, int last, int type, int* counter){
@@ -159,7 +160,7 @@ int randomPartition(int arr[], int first, int last, int type, int* counter){
             return hoarePartition(arr, first, last, type, counter);
         break;
     }
-
+    return 0;
 }
 
 // The main function of the quicksort

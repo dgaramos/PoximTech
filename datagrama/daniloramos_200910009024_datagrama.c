@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct package{
+typedef struct Payload{
 
    int order;
    char* content;
 
-}package;
+}Payload;
 
 void header(){
     printf("\n");
@@ -20,7 +20,7 @@ void header(){
     printf(" dMP     dMP.aMP dMP AMF dMP dMP dMP dMP        dMP   dMP     dMP.aMP dMP dMP   \n");
     printf("dMP      VMMMP  dMP dMP dMP dMP dMP dMP        dMP   dMMMMMP  VMMMP  dMP dMP    \n");
     printf("================================================================================\n");
-    printf("Package Organizer 'Irineu'- POI v1.0 \n");
+    printf("Payload Organizer 'Irineu'- POI v1.0 \n");
     printf("================================================================================\n");
 
 }
@@ -35,33 +35,7 @@ void verifyArgs(char **argv){
         exit(0);
     }
 }
-/*void swap(int* a, int* b){
-    int t = *a;
-    *a = *b;
-    *b = t;
-}
-void heapify(int V[], int i, int n) {
-    unsigned int P = i;
-    unsigned int E = left(i);
-    unsigned int D = right(i);
-    if(E < n && V[E] > V[P]) P = E;
-    if(D < n && V[D] > V[P]) P = D;
-    if(P != i) {
-        swap(&V[P], &V[i]);
-        heapify(V, P, n);
-    }
-}
 
-void heapsort(int V[], int n) {
-    construir_heap(V, n);
-    int i;
-    for(i = n - 1; i > 0; i--) {
-        swap(&V[0], &V[i]);
-        heapify(V, 0, i);
-    }
-}
-
-*/
 int main(int argc, char **argv){
     
     header();
@@ -76,42 +50,42 @@ int main(int argc, char **argv){
     fscanf(fp, "%s", buff);
 
     int n = atof(buff);
-    printf("Packages: %d \n", n);
-    package packages[n];
+    printf("Payloads: %d \n", n);
+    Payload payloads[n];
     
     fscanf(fp, "%s", buff);
-    int packageQuantity = atof(buff);
-    //printf("second number: %d \n", packageQuantity);
+    int payloadQuantity = atof(buff);
+    //printf("second number: %d \n", payloadQuantity);
     printSeparator();
 
     for ( int i = 0; i < n; i++ ) {
         fscanf(fp, "%s", buff);
-        packages[i].order = atof(buff);
-        //printf("order of package %d: %d \n", i, packages[i].order);
+        payloads[i].order = atof(buff);
+        //printf("order of payload %d: %d \n", i, payloads[i].order);
         
         fscanf(fp, "%s", buff);
         int tmp =  atof(buff);
-        //printf("size of package %d: %d \n", i, tmp);
+        //printf("size of payload %d: %d \n", i, tmp);
 
-        packages[i].content = malloc((sizeof(char)*tmp*3)+1);
+        payloads[i].content = malloc((sizeof(char)*tmp*3)+1);
 
         fscanf(fp, "%s", buff);
-        strcpy(packages[i].content, buff);
-        strcat(packages[i].content, " ");
+        strcpy(payloads[i].content, buff);
+        strcat(payloads[i].content, " ");
         for ( int j = 0; j < tmp-1; j++ ) {
             fscanf(fp, "%s", buff);
-            strcat(packages[i].content, buff);
-            strcat(packages[i].content, " ");
+            strcat(payloads[i].content, buff);
+            strcat(payloads[i].content, " ");
         }
-        printf("%d: %s \n",  packages[i].order, packages[i].content);
+        printf("%d: %s \n",  payloads[i].order, payloads[i].content);
     }
     printSeparator();
     fclose(fp);
     
     for(int i = 0; i < n; i++){
         
-        free(packages[i].content);
-        packages[i].content = NULL;
+        free(payloads[i].content);
+        payloads[i].content = NULL;
     }
     printf("ENDING APPLICATION!");
 }
