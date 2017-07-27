@@ -386,10 +386,8 @@ int main(int argc, char **argv){
 
             //Printing on file
             fprintf(fp,"%s: ", diffList[i].code);
-            fprintf(fp, "%.fkg (%2.f%%)", diffList[i].weightDiff, diffList[i].percentageDiff);
-            if(i < j-1){
-                fprintf(fp, "\n");
-            }
+            fprintf(fp, "%.fkg (%2.f%%)\n", diffList[i].weightDiff, diffList[i].percentageDiff);
+
         }else {
             printf("WARNING!\nThe container with code %s has weight diference minor\nthan 10%%, so it is not gonna be printed on file.\n", diffList[i].code);
             printSeparator();
@@ -398,7 +396,6 @@ int main(int argc, char **argv){
     }
     free(containerList);
     free(containerAudit);
-    free(diffList);
     printf("File %s was written succesfully!\n", argv[2]); 
     printf("Closing application...\n");  
     printSeparator();
