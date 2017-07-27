@@ -193,7 +193,6 @@ containerDiff searchContainerDiff(container arr[], int l, int r, container x){
                 strcat(diff.cnpjDiff, arr[mid].cnpj);
 
                 diff.weightDiff = 0;
-                
                 return diff;
 
             }else if(arr[mid].weight != x.weight){
@@ -209,7 +208,6 @@ containerDiff searchContainerDiff(container arr[], int l, int r, container x){
                 }else{
                     diff.percentageDiff = 100 - diff.percentageDiff;
                 }
-
                 return diff;
             }
             /*If the container is has no diference between the containers, returns a 
@@ -240,7 +238,7 @@ containerDiff searchContainerDiff(container arr[], int l, int r, container x){
 int main(int argc, char **argv){
     
     header();
-
+    
     //Verifying if there is two arguments.
     verifyArgs(argv);
 
@@ -249,17 +247,22 @@ int main(int argc, char **argv){
     
     //Reading File and scanning the size of the first array of elements
     fp = fopen(argv[1], "r");
+    
     fscanf(fp, "%s", buff);
 
     long int n = atol(buff);
-    container containerList[n];
+    
+    container *containerList;
+    containerList = (container*) malloc(n*sizeof(container));
+
     printf("File %s is being read!\n", argv[1]);
+    
     printf("Container Quantity: %ld\n", n);
     printSeparator();
 
     //Populating array with file information about the Containers of the first list
     for ( int i = 0; i < n; i++ ) {
-
+        printf("==============================================================================================================================LIST====%d\n", i);
         fscanf(fp, "%s", buff);
         strcpy(containerList[i].code,buff);
         printf("Container Code : %s\n", containerList[i].code );
@@ -279,20 +282,23 @@ int main(int argc, char **argv){
     }
 
     //Checking the size of array
-    printf("Number of Container elements on array: %lu\n", sizeof(containerList)/sizeof(containerList[0]));
+    printf("Number of Container elements on array: %lu\n", n);
     printSeparator();
 
     //Reading File and scanning the size of the second array of elements (Containers to be audited)
     fscanf(fp, "%s", buff);
 
     long int m = atol(buff);
-    container containerAudit[m];
+
+    container *containerAudit;
+    containerAudit = (container*) malloc(m*sizeof(container));
+
     printf("Containers to Audition: %ld\n", m);
     printSeparator();
     
     //Populating array with file information about the Containers of the second list
     for ( int i = 0; i < m; i++ ) {
-
+        printf("===============================================================================================================================AUDIT===%d\n", i);
         fscanf(fp, "%s", buff);
         strcpy(containerAudit[i].code,buff);
         printf("Container Code : %s\n", containerAudit[i].code );
@@ -312,7 +318,7 @@ int main(int argc, char **argv){
 
     }
     //Checking the size of array
-    printf("Number of Containers registered to audition on array: %lu\n", sizeof(containerAudit)/sizeof(containerAudit[0]));
+    printf("Number of Containers registered to audition on array: %lu\n", m);
     printSeparator();
     fclose(fp);
 
@@ -326,7 +332,8 @@ int main(int argc, char **argv){
     printSeparator();
 
     containerDiff diffList[m];
-    containerDiff diff;
+    //containerDiff *diffList;
+    //diffList = (containerDiff*) malloc(sizeof(containerDiff));
 
     int j = 0;
     int k = m;
@@ -335,65 +342,63 @@ int main(int argc, char **argv){
     for (int i = 0; i < n; i++) {
         /*Searching and checking diferences between the supposed
           weight and CNPJ of the owner of the container and what was measured*/
-        diff = searchContainerDiff(containerAudit, 0, (m - 1), containerList[i]);
+        containerDiff diff = searchContainerDiff(containerAudit, 0, (m - 1), containerList[i]);
+
         if(diff.weightDiff > -1){
             
             if(diff.weightDiff == 0){
                 
-                //printf("Container Code: %s\n", diff.code);
-                //printf("Container CNPJ diff: %s\n", diff.cnpjDiff);
+                printf("Container Code: %s\n", diff.code);
+                printf("Container CNPJ diff: %s\n", diff.cnpjDiff);
 
                 //Printing on file
+                printf("ANTES\n");
                 fprintf(fp,"%s: ", diff.code);
-                fprintf(fp, "%s\n" ,diff.cnpjDiff);
-
-                //printSeparator();
+                fprintf(fp, "%s\n", diff.cnpjDiff);
+                printf("DEPOIS\n");
+                printSeparator();
             }else{
                 diffList[j] = diff;
+                printf(" %s\n", diffList[j].code);
                 j++;
-                printf(" %d\n", j);
+                //diffList = (containerDiff*) realloc(diffList, j*sizeof(containerDiff));
+                
             }
             k--; 
             if (k == 0){
-                printf("AAAAAAAAAAAAAAAAAa");
                 break;
             }
         }
         
     }
+    printf("PASSOU");
     mergeSortWeightArray(diffList, 0, j-1);
+    
     for ( int i = 0; i < j; i++ ) {
-        printf(" %d , %d \n", j, i);
-        /*if(diffList[i].percentageDiff > 100){
-            diffList[i].percentageDiff = diffList[i].percentageDiff - 100;
-        }else{
-            diffList[i].percentageDiff = 100 - diffList[i].percentageDiff;
-            printf(" AAAAAAAAAAAAAAAAAAAAaa %f\n", diffList[i].percentageDiff);
-        }*/
         
-
-        //Printing on file
         
-
         if(diffList[i].percentageDiff > 10) {
             printf("Container Code: %s\n", diffList[i].code);
             printf("Container Weight Diff: %.fkg\n", diffList[i].weightDiff);
             printf("Container Weight Percentage Diff: %1.1f%% \n", diffList[i].percentageDiff);
 
             printSeparator();
-            
+
+            //Printing on file
             fprintf(fp,"%s: ", diffList[i].code);
             fprintf(fp, "%.fkg (%2.f%%)", diffList[i].weightDiff, diffList[i].percentageDiff);
-            if(i < j-2){
+            if(i < j-1){
                 fprintf(fp, "\n");
             }
         }else {
-            //printf("WARNING!\nThe container with code %s has weight diference minor\nthan 10%%, so it is not gonna be printed on file.\n", diffList[i].code);
-            //printSeparator();
+            printf("WARNING!\nThe container with code %s has weight diference minor\nthan 10%%, so it is not gonna be printed on file.\n", diffList[i].code);
+            printSeparator();
         }
 
     }
-
+    free(containerList);
+    free(containerAudit);
+    free(diffList);
     printf("File %s was written succesfully!\n", argv[2]); 
     printf("Closing application...\n");  
     printSeparator();
