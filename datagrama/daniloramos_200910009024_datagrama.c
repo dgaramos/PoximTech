@@ -9,6 +9,45 @@ typedef struct Payload{
 
 }Payload;
 
+#define SWAP(arr, a, b) \
+  do { \
+    Payload tmp = arr[a]; \
+    arr[a] = arr[b]; \
+    arr[b] = tmp; \
+  } while (0)
+
+int total;
+void heapify(Payload arr[], int i){
+    int lft = i * 2;
+    int rgt = lft + 1;
+    int grt = i;
+
+    if (lft <= total && arr[lft].order > arr[grt].order){
+        grt = lft;
+    }
+    if (rgt <= total && arr[rgt].order > arr[grt].order){
+        grt = rgt; 
+    }
+    if (grt != i) {
+        SWAP(arr, i, grt);
+        heapify(arr, grt);
+    }
+}
+
+void sort(Payload arr[], int size){
+    total = size - 1;
+
+    for (int i = total / 2; i >= 0; i--)
+        heapify(arr, i);
+
+    for (int i = total; i > 0; i--) {
+        SWAP(arr, 0, i);
+        total--;
+        heapify(arr, 0);
+    }
+}
+
+
 void header(){
     printf("\n");
     printf("\n");
@@ -35,6 +74,7 @@ void verifyArgs(char **argv){
         exit(0);
     }
 }
+
 
 int main(int argc, char **argv){
     
@@ -77,15 +117,41 @@ int main(int argc, char **argv){
             strcat(payloads[i].content, buff);
             strcat(payloads[i].content, " ");
         }
+        
         printf("%d: %s \n",  payloads[i].order, payloads[i].content);
     }
     printSeparator();
     fclose(fp);
+
+    
+    fp = fopen(argv[2], "w+");
+    int index = 0;
+    int i = 0;
+    
+    while(i<n){
+        fprintf(fp,"%d: ", index);
+        for (int j = 0; j < payloadQuantity; j++){
+            if (i == payloads[i].order){
+                fprintf(fp,"%s", payloads[i].content);
+                i++;
+            }
+        }
+        fprintf(fp,"\n");
+        int k = 0;
+        if(i != payloads[i].order){
+            sort(payloads, i+1);
+            k++;
+        }   
+        index++;
+    }   
     
     for(int i = 0; i < n; i++){
-        
+        printf("%d: %s \n",  payloads[i].order, payloads[i].content);
+    }
+     for(int i = 0; i < n; i++){
         free(payloads[i].content);
         payloads[i].content = NULL;
     }
+    fclose(fp);
     printf("ENDING APPLICATION!");
 }
