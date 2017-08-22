@@ -1,6 +1,7 @@
 #include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 typedef struct result{
     
@@ -37,44 +38,59 @@ void printSeparator(){
     printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-\n" );
 }
 
-int *compute_prefix_function(char *pattern, int psize)
-{
-	int k = -1;
-	int i = 1;
-	int *pi = malloc(sizeof(int)*psize);
-	if (!pi)
-		return NULL;
-
-	pi[0] = k;
-	for (i = 1; i < psize; i++) {
-		while (k > -1 && pattern[k+1] != pattern[i])
-			k = pi[k];
-		if (pattern[i] == pattern[k+1])
-			k++;
-		pi[i] = k;
+void inicializar(int tab[], int tamanho){
+	int i;
+	for( i = 0; i < tamanho; i++){
+		tab[i] = -1;
 	}
-	return pi;
 }
 
-int kmp(char *target, int tsize, char *pattern, int psize)
-{
-	int i;
-	int *pi = compute_prefix_function(pattern, psize);
-	int k = -1;
-	if (!pi)
-		return -1;
-	for (i = 0; i < tsize; i++) {
-		while (k > -1 && pattern[k+1] != target[i])
-			k = pi[k];
-		if (target[i] == pattern[k+1])
-			k++;
-		if (k == psize - 1) {
-			free(pi);
-			return i-k;
+void calcular_tabela(int tab[], char P[]) {
+	unsigned int i, m = strlen(P);
+	int j = -1;
+	inicializar(tab, m);
+	for(i = 1; i < m; i++) {
+		while(j >= 0 && P[j + 1] != P[i])
+			j = tab[j];
+		if(P[j + 1] == P[i])
+			j++;
+		tab[i] = j;
+	}
+}
+
+int kmp(int tab[], char T[], char P[], int tSubCad) {
+	unsigned int i, n = strlen(T);
+	unsigned int m = strlen(P);
+	int j = -1, totalAcertos = 0, seq = 0;
+	calcular_tabela(tab, P);
+	for(i = 0; i < n; i++) {
+		
+		if(seq >= tSubCad){
+			break;
+		}
+		
+		while(j >= 0 && P[j + 1] != T[i]){
+			totalAcertos += seq; seq++;
+			j = tab[j];
+			seq = 0;
+		}
+		
+		if(P[j + 1] == T[i]){
+			j++;
+			seq++; printf("          seq parcial: %i\n", seq);
+		}
+		
+		if(j == m - 1) {
+			j = tab[j];			
+			totalAcertos += seq; break;
 		}
 	}
-	free(pi);
-	return -1;
+	printf("          totalAcertos: %i\n", totalAcertos);
+	return totalAcertos;
+}
+
+float percentual(float acertos, float total){
+	return (roundf((acertos/total)*100));
 }
 
 //Main method, requires 2 files as args to run.
@@ -93,10 +109,10 @@ int main(int argc, char **argv){
         
     fscanf(fp, "%s", buff);
     
-    int sizeCadeia = atoi(buff);
+    int sizeSubString = atoi(buff);
 
     printf("File %s is being read!\n", argv[1]);
-    printf("Tamanho da Cadeia: %d\n", sizeCadeia);
+    printf("Tamanho da Cadeia: %d\n", sizeSubString);
     printSeparator();
 
     fscanf(fp, "%s", buff);
@@ -118,12 +134,31 @@ int main(int argc, char **argv){
         percentages[i].code = buff;
         printf("Cadeia de DNA: %s\n", percentages[i].code);
         fscanf(fp, "%s", buff);
-        int m = atoi(buff);
-        char
+        int totalCadeias = atoi(buff);
+        int cadeiasAtivas = 0;
+        int matchedStrings;
+        for ( int j = 0; j < totalCadeias; j++ ) {
+            fscanf(fp, "%s", buff);
+            int sizeString = strlen(buff);
 
+            int tab[sizeString];
+
+            int posicaoDna = 0;
+			matchedStrings = 0;
+
+            matchedStrings = kmp(tab, dna, percentages[i].code, sizeSubString);
+
+            if((matchedStrings / sizeString)>=0.9)
+				matchedStrings++;
+		}
+        printf("Acertos: %i\n", matchedStrings);
+			
+		float perc=0;
+		perc = percentual((float)matchedStrings,(float)totalCadeias);
+		printf("Probabilidade: %f\n",perc);
+		percentages[i].percentage = perc ;
     }
-
-    
+  
     fclose(fp);
 
 }
