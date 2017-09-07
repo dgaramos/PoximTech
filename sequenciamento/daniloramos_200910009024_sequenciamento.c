@@ -65,10 +65,7 @@ int kmp(int tab[], char T[], char P[], int subCad) {
 	int j = -1, seq=0, acertosValidos=0;
 	calcular_tabela(tab, P);
 	for(i = 0; i < n; i++) {
-        printf("i: %d\n", i);
-        printf("T: %c\n",T[i]);
-        printf("P: %c\n",P[j+1]);
-        
+
 		while(j >= 0 && P[j + 1] != T[i]) {
             j = tab[j];
 		}
@@ -83,37 +80,45 @@ int kmp(int tab[], char T[], char P[], int subCad) {
 			seq=0;
         }
 		
-        if (seq >= subCad && P[j + 2] != T[i]){
+        if (seq >= subCad && P[j + 2] != T[i+1]){
 			
 			acertosValidos += seq;
-			printf("          AV: %i\n",seq);
-			printf("          seq: %i\n",seq);
+			printf("          AV: %i\n",acertosValidos);
+            printf("          seq: %i\n",seq);
+            printf("          m: %i\n",m);
+			if (seq < m){
+                char strTemp[m - seq];
+                
+                printf("          m-seq: %i\n",m-seq);
+    
+    
+                strncpy(strTemp, P+seq, m-seq);	
+                
+                printf("          strTemp: %s\n",strTemp);
+                
+                if (seq == m) break;
+                
+                strcpy(P,strTemp);
+                printf("          P: %s\n",strTemp);
+                
+                calcular_tabela(tab, P);
+                m = m - seq;
+                
+    
+                seq = 0;
+                j=-1;
+            }else{
+                printf("     Acertos Validos: %i\n",acertosValidos);
+                return acertosValidos;
+            }
 			
-			char strTemp[m - seq];
-			
-			printf("          m-seq: %i\n",m-seq);
-
-
-			strncpy(strTemp, P+seq, m-seq);	
-			
-			printf("          strTemp: %s\n",strTemp);
-			
-			if (seq == m) break;
-			
-			strcpy(P,strTemp);
-			printf("          P: %s\n",strTemp);
-			
-			calcular_tabela(tab, P);
-			m = m - seq;
             
-
-            seq = 0;
-			j=-1;
 		}
 	}
 	printf("     Acertos Validos: %i\n",acertosValidos);
 	return acertosValidos;
 }
+
 
 float percentual(float acertos, float total){
 	return (roundf((acertos/total)*100));
@@ -185,7 +190,6 @@ void mergeSortResultArray(result arr[], int l, int r){
 int main(int argc, char **argv){
     
     int cadeiasAtivas;
-    int posicaoDna;
     int matchedStrings;
     int totalCadeias;
     header();
@@ -194,7 +198,7 @@ int main(int argc, char **argv){
     verifyArgs(argv);
     
     FILE *fp;
-    char buff[255];
+    char buff[100000];
         
     //Reading File and scanning the size of the first array of elements
     fp = fopen(argv[1], "r");
@@ -207,12 +211,13 @@ int main(int argc, char **argv){
     printf("Tamanho da sub Cadeia: %d\n", sizeSubString);
     printSeparator();
 
-    fscanf(fp, "%s", buff);
+    
 
-    char dna[sizeof(buff)/sizeof(buff[0])];
+    char dna[100000];
 
-    strcpy(dna,buff);
-    printf("Cadeia de DNA: %s\n", dna);
+    fscanf(fp, "%s", dna);
+
+    //printf("Cadeia de DNA: %s\n", dna);
 
     fscanf(fp, "%s", buff);
 
@@ -220,29 +225,31 @@ int main(int argc, char **argv){
     result percentages[n];
     
     printf("Quantidade de doenças: %d\n", n);
- 
+    printSeparator();
     for ( int i = 0; i < n; i++ ) {
         
         fscanf(fp, "%s", buff);
         
         strcpy(percentages[i].name, buff);
     
-        printf("Cadeia de DNA: %s\n", percentages[i].name);
+        printf("Gene a ser verificado: %s\n", percentages[i].name);
         fscanf(fp, "%s", buff);
         totalCadeias = atoi(buff);
         printf("Numero de genes: %d\n", totalCadeias);
         cadeiasAtivas = 0;
+        printSeparator();
         for ( int j = 0; j < totalCadeias; j++ ) {
             fscanf(fp, "%s", buff);
             int sizeString = strlen(buff);
-            printf("cadeia: %s\n", buff);
+            //printf("cadeia: %s\n", buff);
             printf("tamanho da cadeia: %d\n", sizeString);
-            posicaoDna = 0;
             matchedStrings = 0;
             
             int tab[sizeString];
-
+            
             matchedStrings = kmp(tab, dna, buff, sizeSubString);
+            
+            printf("PASSOU\n");
             printf("matchedStrings: %d\n", matchedStrings);
             printf("sizeString: %d\n", sizeString);
             printf("%f\n", (float)matchedStrings / (float)sizeString);
@@ -250,13 +257,17 @@ int main(int argc, char **argv){
                 printf("a cadeia %s está ativa\n", buff);
                 cadeiasAtivas++;
             }
+            
+            printSeparator();
         }
         printf("Acertos: %i\n", cadeiasAtivas);
+        
 			
 		float perc=0;
 		perc = percentual((float)cadeiasAtivas,(float)totalCadeias);
 		printf("Probabilidade: %f\n",perc);
-		percentages[i].percentage = perc ;
+        percentages[i].percentage = perc ;
+        printSeparator();
     }
 
     fclose(fp);
