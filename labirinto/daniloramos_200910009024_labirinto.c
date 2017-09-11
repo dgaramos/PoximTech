@@ -45,8 +45,6 @@ int main(int argc, char **argv){
     
     //Verifying if there is two arguments.
     verifyArgs(argv);
-    
-    //space labyrinth [100][100];
 
     FILE *fp;
     FILE *fp2;
