@@ -7,6 +7,10 @@ typedef struct peer{
     int key;
 }peer;
 
+long long int M = 1103515245;
+long long int D = 12345;    
+long long int key;
+
 void header(){
     printf("\n");
     printf("\n");
@@ -34,6 +38,40 @@ void printSeparator(){
     printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-\n" );
 }
 
+unsigned long G(unsigned long k){ 
+	static unsigned long int j = 0; 
+	if (j == 0){ 
+		key = M * key + D;
+	} 
+	unsigned long z = (key >> j) & 0xFF; 
+	j = (j+8) % 32; 
+	return z;
+}
+
+unsigned long int DHKey(int g,int k,int p){
+    unsigned long int t;
+    if(k==1){
+        return g;
+    }
+    t = DHKey(g,k/2,p);
+    if(k%2==0){
+        return (t*t)%p;
+    }
+    else{
+        return (((t*t)%p)*g)%p;
+    }
+}
+
+int isEven(int i){
+    if(i%2==0){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+
+
 //Main method, requires 2 files as args to run.
 int main(int argc, char **argv){
 
@@ -53,8 +91,7 @@ int main(int argc, char **argv){
     fp = fopen(argv[1], "r");
     fp2 = fopen(argv[2], "w+");
 
-    int M = 1103515245;
-    int D = 12345;    
+
 
     peer A;
 
@@ -82,6 +119,56 @@ int main(int argc, char **argv){
     g = atoi(buff);
     
 
+    unsigned long int keyA = DHKey(g, A.key, p);
+    printf("A sends to B %d\n", keyA);
+    fprintf(fp2, "A->B: %d\n", keyA);
+    unsigned long int keyB  = DHKey(g, B.key, p);
+    printf("B sends to A %d\n", keyB);
+    fprintf(fp2, "B->A: %d\n", keyB);
 
+    printSeparator();
+
+    unsigned long int sA = DHKey(keyB, A.key, p);
+    unsigned long int sB = DHKey(keyA, B.key, p);
+    printf("s calculated by A: %d\n", sA);
+    printf("s calculated by B: %d\n", sB);
+
+    unsigned long int s;
+
+    if (sA==sB){
+        s = sA;
+        printf("sA and sB are equal so s is: %d\n", s);
+    }
+
+    key = s;
+
+    printSeparator();
+
+    fscanf(fp, "%s", buff);
+    int nMessages = atoi(buff);
+    char arrayMessages[nMessages][1000];
+    printf("Number of messages: %d\n", nMessages);
+    for (int i = 0; i < nMessages; i++){
+        fscanf(fp, "%s", buff);
+        strcpy(arrayMessages[i],buff);
+        printf("Message number %d: %s\n", i, arrayMessages[i]);
+
+        if(isEven(i)==1){ 
+            fprintf(fp2, "A->B: ");
+        }else{
+            fprintf(fp2, "B->A: ");
+        }
+
+        int j = 0;
+        unsigned long number;
+        while (arrayMessages[i][j] >= 33){
+            number = arrayMessages[i][j]^G(s);
+            printf("%lu ", number);
+            fprintf(fp2,"%lu ", number);
+            j++;
+        }
+        printf("\n");
+        fprintf(fp2,"\n");
+    }
 
 }
