@@ -9,10 +9,6 @@ typedef int bool;
 typedef struct position{
     int width;
     int height;
-    char R;
-    char F;
-    char L;
-    char B;
 }position;
 
 void header(){
@@ -49,6 +45,8 @@ int main(int argc, char **argv){
     
     //Verifying if there is two arguments.
     verifyArgs(argv);
+    
+    //space labyrinth [100][100];
 
     FILE *fp;
     FILE *fp2;
@@ -124,6 +122,7 @@ int main(int argc, char **argv){
         previous.height = robot.height; 
         
         int steps = 0;
+        int steps2 = 0;
 
         int wayLength = (height-2)*(width-2)+1;
 
@@ -136,9 +135,8 @@ int main(int argc, char **argv){
                 way[steps].height = robot.height;
                 way[steps].width = robot.width;
 
-                way[steps].R = 'L';
-
                 steps++;
+                steps2++;
                 
                 fprintf(fp2, "D [%i,%i]->[%i,%i]\n",robot.height,robot.width,robot.height,robot.width+1);
                 printf("D [%i,%i]->[%i,%i]\n",robot.height,robot.width,robot.height,robot.width+1);
@@ -156,11 +154,9 @@ int main(int argc, char **argv){
                 way[steps].height = robot.height;
                 way[steps].width = robot.width;
 
-				way[steps].R = 'L';
-				way[steps].F = 'L';
-
                 steps++;
-                
+                steps2++;
+
                 fprintf(fp2, "F [%i,%i]->[%i,%i]\n",robot.height,robot.width,robot.height-1,robot.width);
                 printf("F [%i,%i]->[%i,%i]\n",robot.height,robot.width,robot.height-1,robot.width);
                 
@@ -176,11 +172,8 @@ int main(int argc, char **argv){
                 way[steps].height = robot.height;
                 way[steps].width = robot.width;
 
-                way[steps].R = 'L';
-                way[steps].F = 'L';
-                way[steps].L = 'L';
-
                 steps++;
+                steps2++;
 
                 fprintf(fp2, "E [%i,%i]->[%i,%i]\n",robot.height,robot.width,robot.height,robot.width-1);
                 printf("E [%i,%i]->[%i,%i]\n",robot.height,robot.width,robot.height,robot.width-1);
@@ -196,13 +189,9 @@ int main(int argc, char **argv){
                 
                 way[steps].height = robot.height;
                 way[steps].width = robot.width;
-
-                way[steps].R = 'L';
-                way[steps].F = 'L';
-                way[steps].L = 'L';
-                way[steps].B = 'L';
                 
                 steps++;
+                steps2++;
                 
                 fprintf(fp2, "T [%i,%i]->[%i,%i]\n",robot.height,robot.width,robot.height+1,robot.width);
                 printf("T [%i,%i]->[%i,%i]\n",robot.height,robot.width,robot.height+1,robot.width);
@@ -225,16 +214,11 @@ int main(int argc, char **argv){
                 }
                 
                 labyrinth[robot.height][robot.width] = '1';
-
-                way[steps].R = 'Z';
-                way[steps].F = 'Z';
-                way[steps].L = 'Z';
-                way[steps].B = 'Z';
-                
                 robot.height = previous.height;
                 robot.width = previous.width;
                 
                 steps--;
+                labyrinth[robot.height][robot.width] = '1';
                 previous.height = way[steps-1].height ;
                 previous.width = way[steps-1].width;
                 
@@ -246,9 +230,14 @@ int main(int argc, char **argv){
             }
         }
 
-        if (end.height == -1 || end.width == -1){
+        if (steps2 == 0){
+
+        } else if(end.height == -1 || end.width == -1){
             printf( "SEM SAIDA\n");
+            printf( "  steps: %d\n", steps);
+            printf( "  steps2: %d\n", steps2);
             fprintf(fp2, "SEM SAIDA\n");
+
         } else {
             printf( "SAIDA [%i,%i]\n",end.height,end.width);
             fprintf(fp2, "SAIDA [%i,%i]\n",end.height,end.width);
