@@ -9,6 +9,10 @@ typedef int bool;
 typedef struct position{
     int width;
     int height;
+    char R;
+    char F;
+    char L;
+    char B;
 }position;
 
 void header(){
@@ -108,7 +112,7 @@ int main(int argc, char **argv){
         printf("first position width: %d \n",start.width);
         printSeparator();
         printf("Placing robot at w:%d h:%d \n",start.width, start.height);
-        fprintf(fp2, "INICIO [%d,%d]\n", start.width, start.height);
+        fprintf(fp2, "INICIO [%d,%d]\n", start.height, start.width);
         position robot;
         robot.width = start.width;
         robot.height = start.height;
@@ -132,6 +136,8 @@ int main(int argc, char **argv){
                 way[steps].height = robot.height;
                 way[steps].width = robot.width;
 
+                way[steps].R = 'L';
+
                 steps++;
                 
                 fprintf(fp2, "D [%i,%i]->[%i,%i]\n",robot.height,robot.width,robot.height,robot.width+1);
@@ -140,6 +146,7 @@ int main(int argc, char **argv){
                 previous.height = robot.height;
                 previous.width = robot.width;
 
+                labyrinth[robot.height][robot.width] = '1';
                 robot.height = robot.height;
                 robot.width = robot.width+1;
                 
@@ -149,6 +156,9 @@ int main(int argc, char **argv){
                 way[steps].height = robot.height;
                 way[steps].width = robot.width;
 
+				way[steps].R = 'L';
+				way[steps].F = 'L';
+
                 steps++;
                 
                 fprintf(fp2, "F [%i,%i]->[%i,%i]\n",robot.height,robot.width,robot.height-1,robot.width);
@@ -157,6 +167,7 @@ int main(int argc, char **argv){
                 previous.height = robot.height;
                 previous.width = robot.width;
                 
+                labyrinth[robot.height][robot.width] = '1';
                 robot.height = robot.height-1;
                 robot.width = robot.width;
             }
@@ -164,6 +175,10 @@ int main(int argc, char **argv){
 
                 way[steps].height = robot.height;
                 way[steps].width = robot.width;
+
+                way[steps].R = 'L';
+                way[steps].F = 'L';
+                way[steps].L = 'L';
 
                 steps++;
 
@@ -173,6 +188,7 @@ int main(int argc, char **argv){
                 previous.height = robot.height;
                 previous.width = robot.width;
 
+                labyrinth[robot.height][robot.width] = '1';
                 robot.height = robot.height;
                 robot.width = robot.width-1;
             }
@@ -180,6 +196,11 @@ int main(int argc, char **argv){
                 
                 way[steps].height = robot.height;
                 way[steps].width = robot.width;
+
+                way[steps].R = 'L';
+                way[steps].F = 'L';
+                way[steps].L = 'L';
+                way[steps].B = 'L';
                 
                 steps++;
                 
@@ -189,6 +210,7 @@ int main(int argc, char **argv){
                 previous.height = robot.height;
                 previous.width = robot.width;
 
+                labyrinth[robot.height][robot.width] = '1';
                 robot.height = robot.height+1;
                 robot.width = robot.width;
                 
@@ -203,6 +225,11 @@ int main(int argc, char **argv){
                 }
                 
                 labyrinth[robot.height][robot.width] = '1';
+
+                way[steps].R = 'Z';
+                way[steps].F = 'Z';
+                way[steps].L = 'Z';
+                way[steps].B = 'Z';
                 
                 robot.height = previous.height;
                 robot.width = previous.width;
