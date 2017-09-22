@@ -82,7 +82,7 @@ int main(int argc, char **argv){
 
     FILE *fp;
     FILE *fp2;
-    char buff[100];
+    char buff[1000];
 
     printf("File %s is being read!\n", argv[1]);
 
@@ -107,9 +107,9 @@ int main(int argc, char **argv){
     fscanf(fp, "%s", buff);
     B.key = atoi(buff);
 
-    char DH[3];
+    //char DH[3];
 
-    fscanf(fp, "%s", &DH);
+    fscanf(fp, "%s", buff);
 
     int p;
     fscanf(fp, "%s", buff);
@@ -120,24 +120,24 @@ int main(int argc, char **argv){
     
 
     unsigned long int keyA = DHKey(g, A.key, p);
-    printf("A sends to B %d\n", keyA);
-    fprintf(fp2, "A->B: %d\n", keyA);
+    printf("A sends to B %ld\n", keyA);
+    fprintf(fp2, "A->B: %ld\n", keyA);
     unsigned long int keyB  = DHKey(g, B.key, p);
-    printf("B sends to A %d\n", keyB);
-    fprintf(fp2, "B->A: %d\n", keyB);
+    printf("B sends to A %ld\n", keyB);
+    fprintf(fp2, "B->A: %ld\n", keyB);
 
     printSeparator();
 
     unsigned long int sA = DHKey(keyB, A.key, p);
     unsigned long int sB = DHKey(keyA, B.key, p);
-    printf("s calculated by A: %d\n", sA);
-    printf("s calculated by B: %d\n", sB);
+    printf("s calculated by A: %ld\n", sA);
+    printf("s calculated by B: %ld\n", sB);
 
     unsigned long int s;
 
     if (sA==sB){
         s = sA;
-        printf("sA and sB are equal so s is: %d\n", s);
+        printf("sA and sB are equal so s is: %ld\n", s);
     }
 
     key = s;
@@ -159,16 +159,23 @@ int main(int argc, char **argv){
             fprintf(fp2, "B->A: ");
         }
 
-        int j = 0;
+        
         unsigned long number;
-        while (arrayMessages[i][j] >= 33){
+        int messageSize = strlen(arrayMessages[i]);
+        for(int j = 0; j < messageSize; j++){
+        
             number = arrayMessages[i][j]^G(s);
-            printf("%lu ", number);
-            fprintf(fp2,"%lu ", number);
-            j++;
+            if (j+1 == 33){
+                printf("%lu", number);
+                fprintf(fp2,"%lu", number);
+            }else{
+                printf("%lu ", number);
+                fprintf(fp2,"%lu ", number);
+            }
+            
         }
         printf("\n");
+        
         fprintf(fp2,"\n");
     }
-
 }
