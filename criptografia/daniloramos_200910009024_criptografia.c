@@ -165,12 +165,11 @@ int main(int argc, char **argv){
         for(int j = 0; j < messageSize; j++){
         
             number = arrayMessages[i][j]^G(s);
-            if (j+1 == 33){
-                printf("%lu", number);
-                fprintf(fp2,"%lu", number);
-            }else{
-                printf("%lu ", number);
-                fprintf(fp2,"%lu ", number);
+            printf("%lu", number);
+            fprintf(fp2,"%lu", number);
+            if(j != messageSize-1){
+                printf(" ");
+                fprintf(fp2," ");
             }
             
         }
